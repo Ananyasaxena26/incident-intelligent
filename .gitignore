@@ -60,3 +60,6 @@ Thumbs.db
 *.tmp
 *.temp
 .cache/
+
+# Generated Pathway incident cache
+pathway/pathway-cache/

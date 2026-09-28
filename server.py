@@ -29,8 +29,12 @@ logger = logging.getLogger(__name__)
 load_dotenv()
 
 # Configuration
-PATHWAY_URL = "http://localhost:8081/v2/answer"
-PATHWAY_INCIDENTS_URL = "http://localhost:8082/incidents"
+# In Docker, these are overridden to use the Compose service name `pathway`.
+# The localhost defaults keep manual, non-Docker execution working.
+PATHWAY_URL = os.getenv("PATHWAY_URL", "http://localhost:8081/v2/answer")
+PATHWAY_INCIDENTS_URL = os.getenv(
+    "PATHWAY_INCIDENTS_URL", "http://localhost:8082/incidents"
+)
 SUPABASE_URL = os.getenv("SUPABASE_URL", "")
 SUPABASE_KEY = os.getenv("SUPABASE_ANON_KEY", "")
 

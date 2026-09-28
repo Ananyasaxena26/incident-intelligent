@@ -38,7 +38,12 @@ else:
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
 SUPABASE_KEY = os.environ.get("SUPABASE_ANON_KEY", "")
 POLLING_INTERVAL = int(os.environ.get("PATHWAY_POLL_INTERVAL", "5"))
-CACHE_DIR = os.path.expanduser("~/pathway-cache")
+# Keep the writer and the YAML filesystem reader on the same directory.
+# Docker mounts this project at /app; the fallback supports manual WSL runs.
+CACHE_DIR = os.environ.get(
+    "PATHWAY_CACHE_DIR",
+    "/app/pathway-cache" if os.path.isdir("/app") else os.path.expanduser("~/pathway-cache"),
+)
 INCIDENTS_PORT = 8082  # Separate port for incidents API
 
 # Pathway license
@@ -257,7 +262,8 @@ def start_incidents_api():
         runner = web.AppRunner(app)
         loop.run_until_complete(runner.setup())
         
-        site = web.TCPSite(runner, 'localhost', INCIDENTS_PORT)
+        # Bind to all interfaces so the FastAPI container can reach this API.
+        site = web.TCPSite(runner, '0.0.0.0', INCIDENTS_PORT)
         loop.run_until_complete(site.start())
         
         logger.info(f"📋 Incidents API running on http://localhost:{INCIDENTS_PORT}/incidents")

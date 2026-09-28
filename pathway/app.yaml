@@ -7,16 +7,16 @@
 # ============================================================
 $sources:
   - !pw.io.fs.read
-    path: /home/shubh/pathway-cache
+    path: /app/pathway-cache
     format: binary
     mode: streaming  # Enable auto-detection of new files
     with_metadata: true
 
 # ============================================================
-# LLM CONFIGURATION (Groq - Llama 3.3 70B - Best Quality)
+# LLM CONFIGURATION (Groq - GPT OSS 120B)
 # ============================================================
 $llm: !pw.xpacks.llm.llms.LiteLLMChat
-  model: "groq/llama-3.3-70b-versatile"
+  model: "groq/openai/gpt-oss-120b"
   retry_strategy: !pw.udfs.ExponentialBackoffRetryStrategy
     max_retries: 6
   cache_strategy: !pw.udfs.DefaultCache {}

@@ -35,6 +35,8 @@ services:
       - SUPABASE_URL=${SUPABASE_URL}
       - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
       - GROQ_API_KEY=${GROQ_API_KEY}
+      - PATHWAY_URL=http://pathway:8081/v2/answer
+      - PATHWAY_INCIDENTS_URL=http://pathway:8082/incidents
     volumes:
       - ./server.py:/app/server.py
       - ./requirements.txt:/app/requirements.txt
@@ -50,10 +52,12 @@ services:
     container_name: incident_pathway
     ports:
       - "8081:8081"
+      - "8082:8082"
     environment:
       - GROQ_API_KEY=${GROQ_API_KEY}
       - SUPABASE_URL=${SUPABASE_URL}
       - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+      - PATHWAY_CACHE_DIR=/app/pathway-cache
     volumes:
       - ./pathway:/app
     depends_on:
